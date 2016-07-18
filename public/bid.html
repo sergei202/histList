@@ -1,0 +1,26 @@
+<div class="modal-header">
+    <h3 class="modal-title">Add Bid</h3>
+</div>
+
+<div class="modal-body">
+	<form name="bidForm">
+		<div class="form-group">
+			<label>Name</label>
+			<input class="form-control" ng-model="bid.name" required>
+		</div>
+		<div class="form-group">
+			<label>Bid Amount</label>
+			<input type="number" class="form-control" ng-model="bid.amount" required min=0 step=100>
+		</div>
+		<div class="form-group">
+			<label>Days to Complete Job</label>
+			<input type="number" class="form-control" ng-model="bid.days" required min=0 step=1>
+		</div>
+	</form>
+</div>
+
+<div class="modal-footer">
+	<button class="btn btn-danger pull-left" type="button" ng-click="delete()" ng-if="bid._id">Delete</button>
+    <button class="btn btn-primary" type="button" ng-click="save()" ng-disabled="!bidForm.$valid">Save</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

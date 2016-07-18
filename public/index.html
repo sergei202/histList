@@ -30,6 +30,19 @@
 						getHits();
 					});
 				};
+
+				$scope.addBid = function(hit) {					// addBid() will open a modal with BidCtrl, pass 'hit', and then call getHits() after it closes
+					var modalInstance = $uibModal.open({
+						templateUrl: 'bid.html',
+						controller: 'BidCtrl',
+						resolve: {
+							hitItem: function() {return hit;}		// Inject our 'hit' variable as 'hitItem'
+						}
+					});
+					modalInstance.result.then(function() {			// This executes after $uibModalInstance.close() is called from HitCtrl
+						getHits();
+					});
+				};
 			});
 
 			// This is the controller that our hit modal uses.  This is called using loadHit() above
@@ -71,6 +84,22 @@
 					});
 				};
 			});
+
+			app.controller('BidCtrl', function($scope,$uibModal,$uibModalInstance,$http, hitItem) {		// Inject our dependencies and hitItem (the item we are editing)
+				console.log('BidCtrl hitItem=', hitItem);
+				$scope.save = function() {
+					hitItem.bids.push($scope.bid);									// Push the current bid onto the bids array in hitItem
+					$http.post('/hits', hitItem).then(function(response) {			// Post hitItem to our /hits POST route and then...
+						console.log('post /hits: ', response.data);
+						$uibModalInstance.close();
+					});
+				};
+
+				$scope.cancel = function() {
+					$uibModalInstance.dismiss();
+				};
+			});
+
 		</script>
 	</head>
 	<body ng-app="hitList">
@@ -90,7 +119,7 @@
 							<th>Location</th>
 							<th>Contractor</th>
 							<th>Bounty</th>
-							<th>Status</th>
+							<th>Bids</th>
 							<th class="text-right">
 								<a href ng-click="loadHit()"><span class="glyphicon glyphicon-plus"></span></a>		<!-- Calling loadHit() without passing a hit object means it is a new item -->
 							</th>
@@ -103,9 +132,26 @@
 								{{hit.contractor.name}}
 							</td>
 							<td>{{hit.bounty | currency}}</td>
-							<td>{{hit.status}}</td>
+							<td>
+								<table class="table table-condensed">
+									<tr>
+										<th>Bidder</th>
+										<th class="text-right">Amount</th>
+										<th class="text-right">Days</th>
+									</tr>
+									<tr ng-repeat="bid in hit.bids">
+										<td>{{bid.name}}</td>
+										<td class="text-right">{{bid.amount | currency}}</td>
+										<td class="text-right">{{bid.days}}</td>
+									</tr>
+									<tr ng-if="!hit.bids.length">
+										<td colspan=3 class="text-center text-warning">No bids yet!  Be the first!</td>
+									</tr>
+								</table>
+							</td>
 							<td class="text-right">
-								<a href ng-click="loadHit(hit)"><span class="glyphicon glyphicon-pencil"></span></a>
+								<a href ng-click="loadHit(hit)"><span class="glyphicon glyphicon-pencil"></span></a><br>
+								<a href ng-click="addBid(hit)"><span class="glyphicon glyphicon-usd"></span></a>
 							</td>
 						</tr>
 						<tr ng-if="!hits.length">
