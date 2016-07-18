@@ -37,6 +37,10 @@
 				console.log('HitCtrl hitItem=', hitItem);
 				$scope.hit = hitItem;
 
+				$http.get('/contractors').then(function(res) {			// GET /contractors
+					$scope.contractors = res.data;						// Assign the list to $scope.contractors
+				});
+
 				$scope.save = function() {
 					$http.post('/hits', $scope.hit).then(function(response) {		// Post $scope.hit to our /hits POST route and then...
 						console.log('post /hits: ', response.data);
@@ -94,7 +98,10 @@
 						<tr ng-repeat="hit in hits">
 							<td>{{hit.name}}</td>
 							<td>{{hit.location}}</td>
-							<td>{{hit.contractor}}</td>
+							<td>
+								<img class="img-thumbnail pull-left" ng-src="{{hit.contractor.image}}" style="width:80px; margin-right:10px;">
+								{{hit.contractor.name}}
+							</td>
 							<td>{{hit.bounty | currency}}</td>
 							<td>{{hit.status}}</td>
 							<td class="text-right">

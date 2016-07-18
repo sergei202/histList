@@ -43,9 +43,9 @@ app.get('/contractors', function(req,res) {
 });
 
 
-app.get('/hits', function(req,res) {							// Return all the hits in the Hit models (the hits collection)
-	Hit.find().sort({bounty:-1}).exec().then(function(hits) {	// Find all hits, sort by bounty descending, execute, and then...
-		res.json(hits);											// Return the hits array
+app.get('/hits', function(req,res) {													// Return all the hits in the Hit models (the hits collection)
+	Hit.find().populate('contractor').sort({bounty:-1}).exec().then(function(hits) {	// Find all hits, populate contractor, sort by bounty descending, execute, and then...
+		res.json(hits);																	// Return the hits array
 	});
 });
 
