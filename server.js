@@ -9,8 +9,9 @@ var app = express();
 app.use(bodyParser());									// bodyParser will parse POST request body into req.body
 app.use(express.static('./public'));					// Serve our static content
 
-app.listen(8080, function() {
-	console.log('Listening at http://localhost:8080');
+var port = process.env.PORT || 8080;
+app.listen(port, function() {
+	console.log('Listening at http://localhost:'+port);
 });
 
 var Contractor = require('./models/contractor');		// Import our Contractor model
