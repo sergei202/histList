@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/hitList');		// Connect to the hitList database
+mongoose.connect('mongodb://okcoders:okcoders@okcoders.co/hitlist');		// Connect to the hitList database
 mongoose.Promise = Promise;								// Tell mongoose to our ES6 promises
 
 var app = express();
@@ -46,7 +46,7 @@ app.get('/contractors', function(req,res) {
 app.get('/hits', function(req,res) {													// Return all the hits in the Hit models (the hits collection)
 	Hit.find().populate('contractor').sort({bounty:-1}).exec().then(function(hits) {	// Find all hits, populate contractor, sort by bounty descending, execute, and then...
 		res.json(hits);																	// Return the hits array
-	});
+	}, err => res.status(400).json(err));
 });
 
 app.post('/hits', function(req,res) {			// Anything POSTed to /hits will either be created or updated (depending if _id is defined)
