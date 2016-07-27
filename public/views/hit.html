@@ -18,7 +18,7 @@
 		</div>
 		<div class="form-group">
 			<label>Contractor</label>
-			<select class="form-control" ng-model="hit.contractor" ng-options="con._id as con.name for con in contractors"></select>
+			<select class="form-control" ng-model="hit.contractor" ng-options="con as con.name for con in contractors track by con._id"></select>
 		</div>
 	</form>
 </div>
