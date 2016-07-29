@@ -4,14 +4,32 @@
 
 <div class="modal-body">
 	<form name="hitForm">
-		<div class="form-group">
-			<label>Name</label>
-			<input class="form-control" ng-model="hit.name" required>
+		<div class="row">
+			<div class="col-sm-8">
+				<div class="form-group">
+					<label>Target Name</label>
+					<input class="form-control" ng-model="hit.name" required>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<div class="form-group">
+					<label>Bounty</label>
+					<input type="number" class="form-control" ng-model="hit.bounty" required min=0 step=100>
+				</div>
+			</div>
 		</div>
 		<div class="form-group">
-			<label>Bounty</label>
-			<input type="number" class="form-control" ng-model="hit.bounty" required min=0 step=100>
+			<div class="row">
+				<div class="col-sm-8">
+					<label>Target Photo</label>
+					<input type="file" nv-file-select uploader="uploader" class="form-control">
+				</div>
+				<div class="col-sm-4">
+					<img class="img-thumbnail img-responsive" ng-src="{{hit.targetImage}}" ng-if="hit.targetImage">
+				</div>
+			</div>
 		</div>
+
 		<div class="form-group">
 			<label>Last Known Location</label>
 			<input class="form-control" ng-model="hit.location">

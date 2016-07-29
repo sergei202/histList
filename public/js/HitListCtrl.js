@@ -7,6 +7,7 @@ angular.module('hitList').controller('HitListCtrl', function($scope,$http,$uibMo
 	getHits();											// Immediately load the hits list
 
 	$scope.loadHit = function(hit) {					// loadHit() will open a modal with HitCtrl, pass 'hit', and then call getHits() after it closes
+		hit = angular.copy(hit);
 		var modalInstance = $uibModal.open({			// TODO: Comment without variable
 			templateUrl: 'views/hit.html',
 			controller: 'HitCtrl',

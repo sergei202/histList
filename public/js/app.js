@@ -1,1 +1,1 @@
-var app = angular.module('hitList', ['ui.bootstrap']);
+var app = angular.module('hitList', ['ui.bootstrap', 'angularFileUpload']);

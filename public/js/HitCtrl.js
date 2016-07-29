@@ -1,7 +1,16 @@
 // This is the controller that our hit modal uses.  This is called using loadHit() above
-angular.module('hitList').controller('HitCtrl', function($scope,$uibModal,$uibModalInstance,$http, hitItem) {		// Inject our dependencies and hitItem (the item we are editing)
+angular.module('hitList').controller('HitCtrl', function($scope,$uibModal,$uibModalInstance,$http, FileUploader, hitItem) {		// Inject our dependencies and hitItem (the item we are editing)
 	console.log('HitCtrl hitItem=', hitItem);
 	$scope.hit = hitItem;
+
+	$scope.uploader = new FileUploader({
+		url: '/hits/upload',                     // The server-side route where we want the file to be sent
+		autoUpload: true
+	});
+	$scope.uploader.onCompleteItem = function(item,response) {      // This function is called after the upload
+		console.log('upload complete: %o', response);
+		$scope.hit.targetImage = response;
+	};
 
 	$http.get('/contractors').then(function(res) {			// GET /contractors
 		$scope.contractors = res.data;						// Assign the list to $scope.contractors

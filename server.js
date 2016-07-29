@@ -1,6 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var multiparty = require('connect-multiparty')();	// Import multiparty.  Note that we execute the returned function to get an instance
+var fs = require('fs');
 
 mongoose.connect('mongodb://okcoders:okcoders@okcoders.co/hitlist');		// Connect to the hitList database
 mongoose.Promise = Promise;								// Tell mongoose to our ES6 promises
@@ -8,6 +10,8 @@ mongoose.Promise = Promise;								// Tell mongoose to our ES6 promises
 var app = express();
 app.use(bodyParser());									// bodyParser will parse POST request body into req.body
 app.use(express.static('./public'));					// Serve our static content
+app.use('/uploads', express.static('./uploads'));
+
 
 var port = process.env.PORT || 8080;
 app.listen(port, function() {
@@ -49,6 +53,20 @@ app.get('/hits', function(req,res) {													// Return all the hits in the H
 		res.json(hits);																	// Return the hits array
 	}, err => res.status(400).json(err));
 });
+
+app.post('/hits/upload', multiparty, function(req,res) {			// Upload hit target image
+	var file = req.files.file;							// The file object what was uploaded
+	console.log('/upload: %j\n', file);					// Show the structure.  Note that we have name, path, size, etc
+
+	var newPath = './uploads/' + file.name;				// Here is where we could rename the file if we wanted to (to make them consistent or assigned to some ID in a database)
+	fs.rename(file.path, newPath, function(err) {
+		if(err) return res.status(400).json(err);		// Return a 400 error if there was a problem
+		res.json(newPath);								// Return the new file path
+	});
+});
+
+
+
 
 app.post('/hits', function(req,res) {			// Anything POSTed to /hits will either be created or updated (depending if _id is defined)
 	var hit = req.body;							// Reference req.body as hit for ease

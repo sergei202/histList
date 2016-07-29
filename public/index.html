@@ -3,17 +3,19 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Hit List App</title>
+		<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.6/angular.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.3/ui-bootstrap-tpls.min.js"></script>
+		<script src="http://nervgh.github.io/pages/angular-file-upload/dist/angular-file-upload.min.js"></script>
 
 		<script type="text/javascript" src="js/app.js"></script>
 		<script type="text/javascript" src="js/HitListCtrl.js"></script>
 		<script type="text/javascript" src="js/HitCtrl.js"></script>
 		<script type="text/javascript" src="js/BidCtrl.js"></script>
-
 	</head>
+
 	<body ng-app="hitList">
 		<div class="container" ng-controller="HitListCtrl">
 			<div class="page-header">
@@ -29,22 +31,25 @@
 						<tr>
 							<th>Name</th>
 							<th>Location</th>
-							<th>Contractor</th>
+							<th class="hidden-xs">Contractor</th>
 							<th>Bounty</th>
-							<th>Bids</th>
+							<th class="hidden-xs">Bids</th>
 							<th class="text-right">
 								<a href ng-click="loadHit()"><span class="glyphicon glyphicon-plus"></span></a>		<!-- Calling loadHit() without passing a hit object means it is a new item -->
 							</th>
 						</tr>
 						<tr ng-repeat="hit in hits">
-							<td>{{hit.name}}</td>
-							<td>{{hit.location}}</td>
 							<td>
+								{{hit.name}}<br>
+								<img class="img-responsive img-thumbnail" ng-src="{{hit.targetImage}}" ng-if="hit.targetImage">
+							</td>
+							<td>{{hit.location}}</td>
+							<td class="hidden-xs">
 								<img class="img-thumbnail pull-left" ng-src="{{hit.contractor.image}}" style="width:80px; margin-right:10px;">
 								{{hit.contractor.name}}
 							</td>
 							<td>{{hit.bounty | currency}}</td>
-							<td>
+							<td class="hidden-xs">
 								<table class="table table-condensed">
 									<tr>
 										<th>Bidder</th>
